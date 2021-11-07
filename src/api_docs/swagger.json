@@ -1,0 +1,675 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Blog",
+        "description": "Personal Blog API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "email": "apiteam@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "Blog",
+            "description": "Personal Blog API",
+            "externalDocs": {
+                "description": "Find out more",
+                "url": "http://swagger.io"
+            }
+        }
+    ],
+    "schemes": ["https", "http"],
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "paths":{
+        "/auth": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "Authenticate Client",
+                "description": "",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Credentails object to gain access",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Auth"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid Body Parameters"
+                    }
+                }
+            }
+        },
+        "/categories": {
+            "get": {
+                "tags": ["Category"],
+                "summary": "Get Post Categories",
+                "description": "List all the categories",
+                "produces": ["application/json"],
+                "security": [
+                    { 
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/Name"
+                    },
+                    {
+                        "$ref": "#/parameters/Size"
+                    },
+                    {
+                        "$ref": "#/parameters/Page"
+                    },
+                    {
+                        "$ref": "#/parameters/Order"
+                    },
+                    {
+                        "$ref": "#/parameters/OrderBy"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Category"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Category"],
+                "summary": "Add Category",
+                "description": "",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "security": [
+                    { 
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Category details",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Category"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Invalid Body Parameters"
+                    }
+                }
+            }
+        },
+        "/categories/{categoryId}": {
+            "put": {
+                "tags": ["Category"],
+                "summary": "Update Category",
+                "description": "",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "security": [
+                    { 
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "categoryId",
+                        "in": "path",
+                        "description": "Identifier of the Category",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Category details",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Category"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Invalid Body Parameters"
+                    },
+                    "404": {
+                        "description": "Identifier not found."
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Category"],
+                "summary": "Delete Category",
+                "description": "",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "security": [
+                    { 
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "categoryId",
+                        "in": "path",
+                        "description": "Identifier of the Category",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Identifier not found."
+                    }
+                }
+            }
+        },
+        "/posts": {
+            "get": {
+                "tags": ["Post"],
+                "summary": "Get Posts of current user",
+                "description": "List all the user posts",
+                "produces": ["application/json"],
+                "security": [
+                    { 
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/Title"
+                    },
+                    {
+                        "$ref": "#/parameters/Size"
+                    },
+                    {
+                        "$ref": "#/parameters/Page"
+                    },
+                    {
+                        "$ref": "#/parameters/Order"
+                    },
+                    {
+                        "$ref": "#/parameters/OrderBy"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Post"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Post"],
+                "summary": "Add Post",
+                "description": "",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "security": [
+                    { 
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Post details",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Post"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Invalid Body Parameters"
+                    }
+                }
+            }
+        },
+        "/posts/{postId}": {
+            "put": {
+                "tags": ["Post"],
+                "summary": "Update Post",
+                "description": "",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "security": [
+                    { 
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Post details",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Post"
+                        }
+                    },
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "description": "Identifier of the Post",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Invalid Body Parameters"
+                    },
+                    "404": {
+                        "description": "Identifier not found."
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Post"],
+                "summary": "Delete Post",
+                "description": "",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "security": [
+                    { 
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "description": "Identifier of the Post",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Identifier not found."
+                    }
+                }
+            }
+        },
+        "/posts/{postId}/comments": {
+            "get": {
+                "tags": ["Comment"],
+                "summary": "Get Comment of current post",
+                "description": "List all the comments of a post",
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/Content"
+                    },
+                    {
+                        "$ref": "#/parameters/Size"
+                    },
+                    {
+                        "$ref": "#/parameters/Page"
+                    },
+                    {
+                        "$ref": "#/parameters/Order"
+                    },
+                    {
+                        "$ref": "#/parameters/OrderBy"
+                    },
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "description": "Identifier of the Post",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfull operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Comment"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Comment"],
+                "summary": "Add Comment",
+                "description": "",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Post details",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Comment"
+                        }
+                    },
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "description": "Identifier of the Post",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Invalid Body Parameters"
+                    }
+                }
+            }
+        },
+        "/posts/{postId}/comments/{commentId}": {
+            "put": {
+                "tags": ["Comment"],
+                "summary": "Update Comment",
+                "description": "",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Post details",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Comment"
+                        }
+                    },
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "description": "Identifier of the Post",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "commentId",
+                        "in": "path",
+                        "description": "Identifier of the Comment",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Invalid Body Parameters"
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["Comment"],
+                "summary": "Update Comment",
+                "description": "",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "security": [
+                    { 
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "description": "Identifier of the Post",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "commentId",
+                        "in": "path",
+                        "description": "Identifier of the Comment",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Invalid Body Parameters"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Comment"],
+                "summary": "Update Comment",
+                "description": "",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "security": [
+                    { 
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "postId",
+                        "in": "path",
+                        "description": "Identifier of the Post",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "commentId",
+                        "in": "path",
+                        "description": "Identifier of the Comment",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Invalid Body Parameters"
+                    }
+                }
+            }
+
+        }
+    },
+    "parameters": {
+        "Name": {
+            "name": "name",
+            "in": "query",
+            "description": "filter by name",
+            "type": "string"
+        },
+        "Title": {
+            "name": "title",
+            "in": "query",
+            "description": "filter posts by title",
+            "type": "string"
+        },
+        "Content": {
+            "name": "content",
+            "in": "query",
+            "description": "filter comments by content",
+            "type": "string"
+        },
+        "Order": {
+            "name": "order",
+            "in": "query",
+            "description": "ASC or DESC",
+            "type": "string",
+            "enum": [
+                "ASC",
+                "DESC"
+            ]
+        },
+        "OrderBy": {
+            "name": "orderBy",
+            "in": "query",
+            "description": "Order values that need to be considered for filter",
+            "type": "string"
+        },
+        "Size": {
+            "name": "size",
+            "in": "query",
+            "description": "Limit of items for a page",
+            "type": "number"
+        },
+        "Page": {
+            "name": "page",
+            "in": "query",
+            "description": "Current number of the page",
+            "type": "number"
+        }
+    },
+    "definitions": {
+        "Auth": {
+            "type": "object",
+            "required": ["email", "password"],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "Category": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "Post": {
+            "type": "object",
+            "required": ["title", "content", "category"],
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "object",
+                    "properties": {
+                        "categoryId": {
+                            "type": "string",
+                            "required": true
+                        },
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "author": {
+                    "type": "object",
+                    "properties": {
+                        "userId": {
+                            "type": "string"
+                        },
+                        "name": {
+                            "type": "string"
+                        },
+                        "email": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "Comment": {
+            "type": "object",
+            "required": ["email", "content"],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "isRemoved": {
+                    "type": "boolean"
+                },
+                "star": {
+                    "type": "number"
+                },
+                "createdAt": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "externalDocs": {
+        "description": "Find out more about Swagger",
+        "url": "http://swagger.io"
+    }
+}
