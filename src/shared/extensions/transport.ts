@@ -12,9 +12,8 @@ export class DatabaseTransport extends Transport {
             message: info.message == undefined ? "" : info.message,
             additionaldetails: info.detail == undefined ? "" : typeof info.detail === 'object' ? JSON.stringify(info.detail) :  info.detail,
             severity: info.level === "error" ? "E" : info.level === "info" ? "I" : "D",
-            processname: "API"
+            processname: "JOB"
         }
-        console.log(logInfo);
         setImmediate(() => {
             if (!info.skip) {
                 LogInfo.create(logInfo);

@@ -1,11 +1,9 @@
 import { Sequelize } from "sequelize";
 import { IDatabaseConnectionOptions } from "../shared/interfaces";
-import { Category, category } from "./category.model";
-import { comment } from "./comment.model";
 import { logInfo } from "./loginfo.model";
-import { Post, post } from "./post.model";
-import { User, user } from "./user.model";
-
+import { userEmail } from "./useremail.model";
+import { stockThreshold } from "./stockthreshold.model";
+import { emailQueue } from "./emailqueue.model";
 
 export const sequelize = async (connOptions: IDatabaseConnectionOptions) => {
     try {
@@ -31,14 +29,10 @@ export const sequelize = async (connOptions: IDatabaseConnectionOptions) => {
         });
 
         //initialize models
-        user(config);
         logInfo(config);
-        category(config);
-        comment(config);
-        post(config);
-
-        Post.hasOne(Category, { as: "category", sourceKey: "categoryid", foreignKey: "categoryid" });
-        Post.hasOne(User, { as: "author", sourceKey: "userid", foreignKey: "userid" });
+        userEmail(config);
+        stockThreshold(config);
+        emailQueue(config);
 
     } catch (error) {
         global.logger.log({
@@ -50,8 +44,7 @@ export const sequelize = async (connOptions: IDatabaseConnectionOptions) => {
 
 }
 
-export * from "./user.model";
 export * from "./loginfo.model";
-export * from "./category.model";
-export * from "./comment.model";
-export * from "./post.model";
+export * from "./useremail.model";
+export * from "./stockthreshold.model";
+export * from "./emailqueue.model";
