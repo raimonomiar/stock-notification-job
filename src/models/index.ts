@@ -1,8 +1,8 @@
 import { Sequelize } from "sequelize";
 import { IDatabaseConnectionOptions } from "../shared/interfaces";
 import { logInfo } from "./loginfo.model";
-import { userEmail } from "./useremail.model";
-import { stockThreshold } from "./stockthreshold.model";
+import { userEmail, UserEmail } from "./useremail.model";
+import { stockThreshold, StockThreshold } from "./stockthreshold.model";
 import { emailQueue } from "./emailqueue.model";
 
 export const sequelize = async (connOptions: IDatabaseConnectionOptions) => {
@@ -33,6 +33,9 @@ export const sequelize = async (connOptions: IDatabaseConnectionOptions) => {
         userEmail(config);
         stockThreshold(config);
         emailQueue(config);
+
+        //relations
+        StockThreshold.hasOne(UserEmail, {as: 'user', sourceKey: 'useremailid', foreignKey: 'useremailid'});
 
     } catch (error) {
         global.logger.log({

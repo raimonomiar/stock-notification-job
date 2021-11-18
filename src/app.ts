@@ -1,8 +1,14 @@
-import { IDatabaseConnectionOptions } from "./shared/interfaces";
+import { IDatabaseConnectionOptions, IStock } from "./shared/interfaces";
 import { sequelize } from "./models";
+import { StockService, UserEmailService, EmailQueueService, StockThresholdService } from "./services";
+
 export default class App {
 
-    constructor() {
+    constructor(private stockService: StockService,
+        private userEmailService: UserEmailService,
+        private emailQueueService: EmailQueueService,
+        private stockThresholdService: StockThresholdService
+    ) {
         this.createDatabaseConnection({
             database: process.env.DB_DATABASE,
             username: process.env.DB_USER,
@@ -16,7 +22,7 @@ export default class App {
         try {
 
             await sequelize(connOptions);
-
+            await this.processEmailQueue()
         } catch (error) {
             global.logger.log({
                 level: "error",
@@ -26,12 +32,26 @@ export default class App {
         }
     }
 
-    run(environment: string) {
-        global.logger.log({
-            level: 'info',
-            message: `Server running in ${environment} mode`,
-            skip: true
-        })
+
+
+    run( cb: () => void) {
+        cb();
+    }
+
+    async processEmailQueue() {
+        try {
+            const apiDatas = await this.stockService.getTodayStockPrice();
+            const userStocks = await this.stockThresholdService.getStockDetails();
+
+            await this.emailQueueService.updateEmailQueue(userStocks, apiDatas.d);
+        } catch (error) {
+            global.logger.log({
+                level: "error",
+                message: "Error processing Email Queue",
+                detail: error.message
+            })
+        }
+
     }
 
 }

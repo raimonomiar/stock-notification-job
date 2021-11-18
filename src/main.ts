@@ -2,6 +2,7 @@ import { config } from "dotenv";
 import { resolve } from "path";
 import App from "./app";
 import logger from "./shared/logger";
+import { StockService, EmailQueueService, UserEmailService, StockThresholdService } from "./services";
 
 declare global {
     namespace NodeJS {
@@ -22,5 +23,17 @@ if (error) {
 
 global.logger = logger;
 
-const app = new App()
-app.run(environment);
+const app = new App(
+    new StockService(),
+    new UserEmailService(),
+    new EmailQueueService(),
+    new StockThresholdService
+);
+
+app.run(() => {
+    global.logger.log({
+        level: 'info',
+        message: `Job running in ${environment} mode`,
+        skip: true
+    });
+});

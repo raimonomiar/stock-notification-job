@@ -1,2 +1,3 @@
-export * from "./application.interface";
-export * from "./database.interface";
+export * from './application.interface';
+export * from './database.interface';
+export * from './stock.interface';

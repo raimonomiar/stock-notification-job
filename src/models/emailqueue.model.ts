@@ -25,6 +25,6 @@ export function emailQueue(sequelize: Sequelize) {
     }, {
         sequelize,
         timestamps: false,
-        tableName: "useremails"
+        tableName: "emailqueue"
     });
 }
