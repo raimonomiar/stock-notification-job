@@ -3,7 +3,7 @@ export class UserEmailService {
 
     async getUsersDetail() {
         return await UserEmail.findAll({
-            attributes: [['userid', 'userId'], 'email'],
+            attributes: ['useremailid', 'email'],
             where: { deletedat: null}
         })
     }
