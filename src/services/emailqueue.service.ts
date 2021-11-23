@@ -5,13 +5,14 @@ export class EmailQueueService {
 
     async updateEmailQueue(userStocks: StockThreshold[], stocks: IStockDetail[]) {
         for (const user of userStocks) {
-            const queueExists = EmailQueue.findOne({
+            const queueExists = await EmailQueue.findOne({
                 attributes: ['emailqueueid'],
                 where: { deletedat: null, status: 'Ready', stockthresholdid: user.getDataValue('stockThresholdId') }
             });
-
             if (queueExists == null) {
                 const stock = stocks.find(s => s.StockSymbol == user.getDataValue('symbol'));
+              
+                
                 if (stock !== null) {
                     if (user.getDataValue('threshold') <= stock.ClosingPrice) {
                         await EmailQueue.create({ stockthresholdid: user.getDataValue('stockThresholdId'), status: 'Ready' });
