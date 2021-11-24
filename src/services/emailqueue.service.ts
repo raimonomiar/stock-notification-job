@@ -10,9 +10,7 @@ export class EmailQueueService {
                 where: { deletedat: null, status: 'Ready', stockthresholdid: user.getDataValue('stockThresholdId') }
             });
             if (queueExists == null) {
-                const stock = stocks.find(s => s.StockSymbol == user.getDataValue('symbol'));
-              
-                
+                const stock = stocks.find(s => s.StockSymbol.toLowerCase() == user.getDataValue('symbol').toLowerCase());
                 if (stock !== null) {
                     if (user.getDataValue('threshold') <= stock.ClosingPrice) {
                         await EmailQueue.create({ stockthresholdid: user.getDataValue('stockThresholdId'), status: 'Ready' });
@@ -42,7 +40,7 @@ export class EmailQueueService {
                 from: process.env.SMTP_USER,
                 to: user.getDataValue('email'),
                 subject: 'Stock Notification',
-                text: `Hi, \rThe share ${queue.getDataValue('stock').symbol} has exceeded ${queue.getDataValue('stock').threshold} closing price.`
+                text: `Hi, \rThe share ${queue.getDataValue('stock').symbol.toUpperCase()} has exceeded ${queue.getDataValue('stock').threshold} closing price.`
             }).then(async (info) => {
                 global.logger.log({
                     level: 'info',
