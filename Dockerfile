@@ -12,4 +12,4 @@ WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app "./"
 RUN npm prune --production
 
-CMD ["node", "dist/main.js"]
+CMD ["node", "--tls-min-v1.0", "dist/main.js"]
